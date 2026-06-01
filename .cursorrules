@@ -1,0 +1,6 @@
+# Package Management Rules
+- ALWAYS use `pnpm` for installing dependencies and running scripts.
+- NEVER use `npm` or `yarn`. 
+- If you need to add a new package, use `pnpm add <package-name>`.
+- If you need to run a development server, use `pnpm dev`.
+- Do not generate or modify `package-lock.json` or `yarn.lock`. Only rely on `pnpm-lock.yaml`.

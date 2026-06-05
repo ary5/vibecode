@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CameraView } from './components/CameraView'
 import { MasculineFeminineGauge } from './components/MasculineFeminineGauge'
 import { useCamera } from './hooks/useCamera'
@@ -43,7 +43,14 @@ function App() {
     cameraStatus === 'active'
 
   const showResult = step === 'scanning' && scannerStatus === 'complete' && result
-  const showCamera = step === 'scanning' && cameraStatus === 'active'
+  const showCameraBox =
+    step === 'scanning' && cameraStatus === 'active' && !showResult
+
+  useEffect(() => {
+    if (showResult) {
+      stopCamera()
+    }
+  }, [showResult, stopCamera])
 
   return (
     <div className="app">
@@ -79,12 +86,12 @@ function App() {
               </div>
             )}
 
-            {showCamera && (
+            {showCameraBox && (
               <>
                 <CameraView
                   videoRef={bindVideoRef}
                   stableProgress={isScanning ? stableProgress : 0}
-                  isScanning={isScanning && !showResult}
+                  isScanning={isScanning}
                 />
 
                 {scannerStatus === 'loading_models' && (
@@ -94,20 +101,20 @@ function App() {
                 {isScanning && (
                   <p className="status-message">Position your face in the frame</p>
                 )}
-
-                {showResult && (
-                  <div className="app__result">
-                    <h2>Your result</h2>
-                    <MasculineFeminineGauge score={result.feminineScore} />
-                    <p className="disclaimer">
-                      For entertainment only — results are approximate.
-                    </p>
-                    <button type="button" className="btn btn--primary" onClick={handleScanAgain}>
-                      Scan again
-                    </button>
-                  </div>
-                )}
               </>
+            )}
+
+            {showResult && (
+              <div className="app__result">
+                <h2>Your result</h2>
+                <MasculineFeminineGauge score={result.feminineScore} />
+                <p className="disclaimer">
+                  For entertainment only — results are approximate.
+                </p>
+                <button type="button" className="btn btn--primary" onClick={handleScanAgain}>
+                  Scan again
+                </button>
+              </div>
             )}
 
             {scannerStatus === 'error' && (

@@ -1,11 +1,19 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
-import mkcert from 'vite-plugin-mkcert'
 
-export default defineConfig(({ command }) => ({
-  plugins: [react(), ...(command === 'serve' ? [mkcert()] : [])],
-  server: {
-    host: true,
-    https: true,
-  },
-}))
+export default defineConfig(async ({ command }) => {
+  const plugins: PluginOption[] = [react()]
+
+  if (command === 'serve') {
+    const { default: mkcert } = await import('vite-plugin-mkcert')
+    plugins.push(mkcert())
+  }
+
+  return {
+    plugins,
+    server: {
+      host: true,
+      https: true,
+    },
+  }
+})

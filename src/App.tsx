@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CameraView } from './components/CameraView'
 import { MasculineFeminineGauge } from './components/MasculineFeminineGauge'
 import { useCamera } from './hooks/useCamera'
@@ -44,6 +44,12 @@ function App() {
 
   const showResult = step === 'scanning' && scannerStatus === 'complete' && result
   const showCamera = step === 'scanning' && cameraStatus === 'active' && !showResult
+
+  useEffect(() => {
+    if (showResult) {
+      stopCamera()
+    }
+  }, [showResult, stopCamera])
 
   return (
     <div className="app">

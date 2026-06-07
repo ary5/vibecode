@@ -43,29 +43,34 @@ function App() {
     cameraStatus === 'active'
 
   const showResult = step === 'scanning' && scannerStatus === 'complete' && result
-  const showCamera = step === 'scanning' && cameraStatus === 'active'
+  const showCamera = step === 'scanning' && cameraStatus === 'active' && !showResult
 
   return (
     <div className="app">
       <header className="app__header">
-        <h1>Face Scan</h1>
+        <h1 className="app__title">face scan</h1>
         <p className="app__subtitle">
           Allow camera access to scan your face and see where you fall on the
-          masculine–feminine spectrum.
+          masculine–feminine spectrum. runs on your device. no photo taken. no
+          frame uploaded.
         </p>
       </header>
 
       <main className="app__main">
         {step === 'idle' && (
-          <div className="app__idle">
-            <button type="button" className="btn btn--primary" onClick={handleStart}>
-              Start scan
+          <div className="camera-frame camera-frame--idle">
+            <button
+              type="button"
+              className="btn btn--scan"
+              onClick={handleStart}
+            >
+              Start Scan
             </button>
           </div>
         )}
 
         {step === 'scanning' && (
-          <div className="app__scan">
+          <>
             {cameraStatus === 'requesting' && (
               <p className="status-message">Requesting camera access…</p>
             )}
@@ -73,52 +78,56 @@ function App() {
             {cameraStatus === 'error' && (
               <div className="error-panel">
                 <p>{cameraError}</p>
-                <button type="button" className="btn" onClick={handleScanAgain}>
-                  Try again
+                <button type="button" className="btn btn--scan" onClick={handleScanAgain}>
+                  Start Scan
                 </button>
               </div>
             )}
 
             {showCamera && (
               <>
-                <CameraView
-                  videoRef={bindVideoRef}
-                  stableProgress={isScanning ? stableProgress : 0}
-                  isScanning={isScanning && !showResult}
-                />
+                <div className="camera-frame">
+                  <CameraView
+                    videoRef={bindVideoRef}
+                    stableProgress={isScanning ? stableProgress : 0}
+                    isScanning={isScanning}
+                  />
+                </div>
 
                 {scannerStatus === 'loading_models' && (
-                  <p className="status-message">Loading models…</p>
+                  <p className="scan-status">loading models…</p>
                 )}
 
                 {isScanning && (
-                  <p className="status-message">Position your face in the frame</p>
+                  <p className="scan-status">
+                    scanning ... please center your face
+                  </p>
                 )}
+              </>
+            )}
 
-                {showResult && (
-                  <div className="app__result">
-                    <h2>Your result</h2>
-                    <MasculineFeminineGauge score={result.feminineScore} />
-                    <p className="disclaimer">
-                      For entertainment only — results are approximate.
-                    </p>
-                    <button type="button" className="btn btn--primary" onClick={handleScanAgain}>
-                      Scan again
-                    </button>
-                  </div>
-                )}
+            {showResult && (
+              <>
+                <MasculineFeminineGauge feminineScore={result.feminineScore} />
+                <button
+                  type="button"
+                  className="btn btn--scan"
+                  onClick={handleScanAgain}
+                >
+                  Start Scan
+                </button>
               </>
             )}
 
             {scannerStatus === 'error' && (
               <div className="error-panel">
                 <p>{scannerError}</p>
-                <button type="button" className="btn" onClick={handleRescan}>
-                  Try again
+                <button type="button" className="btn btn--scan" onClick={handleRescan}>
+                  Start Scan
                 </button>
               </div>
             )}
-          </div>
+          </>
         )}
       </main>
     </div>

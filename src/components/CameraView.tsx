@@ -20,17 +20,12 @@ export function CameraView({
         muted
         autoPlay
       />
-      {isScanning && (
-        <div className="camera-view__overlay">
-          <div className="camera-view__frame" />
-          {stableProgress > 0 && stableProgress < 100 && (
-            <div className="camera-view__progress">
-              <div
-                className="camera-view__progress-bar"
-                style={{ width: `${stableProgress}%` }}
-              />
-            </div>
-          )}
+      {isScanning && stableProgress > 0 && stableProgress < 100 && (
+        <div className="camera-view__progress">
+          <div
+            className="camera-view__progress-bar"
+            style={{ width: `${stableProgress}%` }}
+          />
         </div>
       )}
     </div>

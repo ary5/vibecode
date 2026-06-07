@@ -1,0 +1,40 @@
+{
+  "hash": "dd923896",
+  "configHash": "381a8cb2",
+  "lockfileHash": "43274b92",
+  "browserHash": "f20cffa5",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "984e4d3c",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "e7f30e85",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "4264cd70",
+      "needsInterop": true
+    },
+    "@vladmandic/face-api": {
+      "src": "../../node_modules/.pnpm/@vladmandic+face-api@1.7.15/node_modules/@vladmandic/face-api/dist/face-api.esm.js",
+      "file": "@vladmandic_face-api.js",
+      "fileHash": "204e1aa2",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-SR4T3V3P": {
+      "file": "chunk-SR4T3V3P.js"
+    },
+    "chunk-VUNV25KB": {
+      "file": "chunk-VUNV25KB.js"
+    }
+  }
+}

@@ -4,13 +4,17 @@ import {
   getSpectrumLabel,
   toMasculineScore,
 } from '../lib/spectrum'
+import {
+  GAUGE_CENTER_X,
+  GAUGE_GRADIENT,
+  GAUGE_HEIGHT,
+  GAUGE_WIDTH,
+  TEARDROP_PATH,
+} from '../lib/teardropGauge'
 
 type MasculineFeminineGaugeProps = {
   feminineScore: number
 }
-
-const SCALE_HEIGHT = 317
-const SCALE_WIDTH = 73
 
 export function MasculineFeminineGauge({
   feminineScore,
@@ -18,7 +22,8 @@ export function MasculineFeminineGauge({
   const masculineScore = toMasculineScore(feminineScore)
   const label = getSpectrumLabel(masculineScore)
   const labelColor = getSpectrumColor(masculineScore)
-  const markerY = SCALE_HEIGHT - (masculineScore / 100) * SCALE_HEIGHT
+  const markerY = GAUGE_HEIGHT - (masculineScore / 100) * GAUGE_HEIGHT
+  const markerTop = 12 + markerY
 
   return (
     <div className="result-panel">
@@ -32,7 +37,7 @@ export function MasculineFeminineGauge({
         <div className="spectrum">
           <div
             className="spectrum__label-row"
-            style={{ top: `${(markerY / SCALE_HEIGHT) * 100}%` }}
+            style={{ top: `${markerTop}px` }}
           >
             <span
               className="spectrum__label"
@@ -42,68 +47,49 @@ export function MasculineFeminineGauge({
             </span>
             <svg
               className="spectrum__arrow"
-              viewBox="0 0 51 15"
+              viewBox="0 0 52 15"
               width="51"
               height="15"
               aria-hidden
             >
-              <line
-                x1="0"
-                y1="7.5"
-                x2="45"
-                y2="7.5"
-                stroke="white"
-                strokeWidth="2"
+              <path
+                d="M51.7071 8.07107C52.0976 7.68054 52.0976 7.04738 51.7071 6.65685L45.3431 0.292893C44.9526 -0.097631 44.3195 -0.097631 43.9289 0.292893C43.5384 0.683418 43.5384 1.31658 43.9289 1.70711L49.5858 7.36396L43.9289 13.0208C43.5384 13.4113 43.5384 14.0445 43.9289 14.435C44.3195 14.8256 44.9526 14.8256 45.3431 14.435L51.7071 8.07107ZM0 7.36396V8.36396H51V7.36396V6.36396H0V7.36396Z"
+                fill="white"
               />
-              <polygon points="45,2 51,7.5 45,13" fill="white" />
             </svg>
           </div>
 
           <div className="spectrum__scale-wrap">
             <svg
               className="spectrum__scale"
-              viewBox={`0 0 ${SCALE_WIDTH} ${SCALE_HEIGHT}`}
-              width={SCALE_WIDTH}
-              height={SCALE_HEIGHT}
+              viewBox={`0 0 ${GAUGE_WIDTH} ${GAUGE_HEIGHT}`}
+              width={GAUGE_WIDTH}
+              height={GAUGE_HEIGHT}
               role="img"
               aria-label={`Masculine score ${masculineScore} out of 100`}
             >
               <defs>
                 <linearGradient
                   id="spectrum-gradient"
-                  x1="0"
-                  y1="1"
-                  x2="0"
-                  y2="0"
+                  x1={GAUGE_CENTER_X}
+                  y1="0"
+                  x2={GAUGE_CENTER_X}
+                  y2={GAUGE_HEIGHT}
+                  gradientUnits="userSpaceOnUse"
                 >
-                  <stop offset="0%" stopColor="#d5edac" />
-                  <stop offset="35%" stopColor="#e8c547" />
-                  <stop offset="65%" stopColor="#e86530" />
-                  <stop offset="100%" stopColor="#db381f" />
+                  <stop stopColor={GAUGE_GRADIENT.top} />
+                  <stop offset="1" stopColor={GAUGE_GRADIENT.bottom} />
                 </linearGradient>
               </defs>
 
-              <path
-                d="M36.5 0 C56 0 72.5 16 72.5 36 L72.5 280 C72.5 302 56 317 36.5 317 C17 317 0.5 302 0.5 280 L0.5 36 C0.5 16 17 0 36.5 0 Z"
-                fill="url(#spectrum-gradient)"
-              />
-
-              <circle
-                cx={36.5}
-                cy={markerY}
-                r="10"
-                fill="white"
-                stroke="#241c33"
-                strokeWidth="2"
-              />
+              <path d={TEARDROP_PATH} fill="url(#spectrum-gradient)" />
             </svg>
 
-            <span className="spectrum__endpoint spectrum__endpoint--top">
-              100 masculine
-            </span>
-            <span className="spectrum__endpoint spectrum__endpoint--bottom">
-              0 feminine
-            </span>
+            <div
+              className="spectrum__marker"
+              style={{ top: `${(markerY / GAUGE_HEIGHT) * 100}%` }}
+              aria-hidden
+            />
           </div>
         </div>
       </div>

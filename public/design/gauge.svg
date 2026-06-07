@@ -1,0 +1,12 @@
+<svg viewBox="0 0 72 317" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gauge-gradient" x1="36" y1="0" x2="36" y2="317" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DB381F"/>
+      <stop offset="1" stop-color="#D5EDAC"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M 36 0 A 36 36 0 0 1 72 36 L 48 305 A 12 12 0 0 1 24 305 L 0 36 A 36 36 0 0 1 36 0 Z"
+    fill="url(#gauge-gradient)"
+  />
+</svg>

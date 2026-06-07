@@ -169,7 +169,7 @@ body {
 
 .result-panel__body {
   display: flex;
-  gap: 1.5rem;
+  gap: 2.5rem;
   align-items: flex-start;
   justify-content: center;
 }
@@ -187,58 +187,66 @@ body {
 .spectrum {
   position: relative;
   flex-shrink: 0;
+  width: calc(7rem + 72px);
   min-height: 317px;
-  padding-left: 7rem;
+  padding: 12px 0 12px 7rem;
+  overflow: visible;
 }
 
 .spectrum__label-row {
   position: absolute;
   left: 0;
+  width: calc(100% - 72px);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: flex-end;
+  gap: 0.65rem;
   transform: translateY(-50%);
-  z-index: 1;
+  z-index: 3;
+  pointer-events: none;
 }
 
 .spectrum__label {
   font-size: 1.25rem;
   font-weight: 700;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .spectrum__arrow {
   flex-shrink: 0;
+  display: block;
 }
 
 .spectrum__scale-wrap {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 12px;
+  width: 72px;
+  height: 317px;
+  overflow: visible;
 }
 
 .spectrum__scale {
   display: block;
+  width: 72px;
+  height: 317px;
+  overflow: visible;
 }
 
-.spectrum__endpoint {
+.spectrum__marker {
   position: absolute;
-  right: calc(100% + 0.5rem);
-  font-size: 0.65rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.55);
-  white-space: nowrap;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-.spectrum__endpoint--top {
-  top: 0;
-}
-
-.spectrum__endpoint--bottom {
-  bottom: 0;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #241c33;
+  box-sizing: border-box;
+  z-index: 2;
+  pointer-events: none;
 }
 
 @media (max-width: 420px) {
@@ -253,6 +261,6 @@ body {
   }
 
   .spectrum {
-    padding-left: 6.5rem;
+    padding: 12px 0 12px 6.5rem;
   }
 }

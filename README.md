@@ -2,6 +2,8 @@
 
 A client-side web app that scans your face via the camera and rates where you fall on a masculine–feminine spectrum. All processing runs in the browser — no backend or API keys required.
 
+> **Roadmap:** This app is planned to become a **stare-off game** using [@vladmandic/human](https://github.com/vladmandic/human). See [docs/STARE-OFF-MIGRATION.md](docs/STARE-OFF-MIGRATION.md) for the full migration plan.
+
 ## Local development
 
 Requires [pnpm](https://pnpm.io/).

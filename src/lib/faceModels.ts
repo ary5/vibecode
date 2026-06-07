@@ -1,30 +1,67 @@
-import * as faceapi from '@vladmandic/face-api'
-import { Gender } from '@vladmandic/face-api'
+import Human, { type Config, type Gender } from '@vladmandic/human'
 
-const MODEL_URL = '/models'
+const MODEL_BASE_PATH =
+  'https://cdn.jsdelivr.net/npm/@vladmandic/human/models/'
 
+const humanConfig: Partial<Config> = {
+  backend: 'webgl',
+  modelBasePath: MODEL_BASE_PATH,
+  debug: false,
+  face: {
+    enabled: true,
+    detector: {
+      enabled: true,
+      rotation: false,
+      maxDetected: 1,
+      minConfidence: 0.5,
+    },
+    mesh: { enabled: false },
+    attention: { enabled: false },
+    iris: { enabled: false },
+    description: { enabled: true },
+    emotion: { enabled: false },
+    antispoof: { enabled: false },
+    liveness: { enabled: false },
+    gear: { enabled: false },
+  },
+  body: { enabled: false },
+  hand: { enabled: false },
+  object: { enabled: false },
+  gesture: { enabled: false },
+  segmentation: { enabled: false },
+}
+
+let human: Human | null = null
+let loadPromise: Promise<void> | null = null
 let modelsLoaded = false
+
+function getHuman(): Human {
+  if (!human) {
+    human = new Human(humanConfig)
+  }
+  return human
+}
 
 export async function loadFaceModels(): Promise<void> {
   if (modelsLoaded) return
+  if (loadPromise) return loadPromise
 
-  await Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-    faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
-    faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL),
-  ])
+  loadPromise = getHuman()
+    .load()
+    .then(() => {
+      modelsLoaded = true
+    })
+    .catch((err: unknown) => {
+      loadPromise = null
+      throw err
+    })
 
-  modelsLoaded = true
+  return loadPromise
 }
 
 export function areModelsLoaded(): boolean {
   return modelsLoaded
 }
-
-const detectorOptions = new faceapi.TinyFaceDetectorOptions({
-  inputSize: 224,
-  scoreThreshold: 0.5,
-})
 
 export type FaceScanResult = {
   feminineScore: number
@@ -32,33 +69,33 @@ export type FaceScanResult = {
   genderProbability: number
 }
 
-export function toFeminineScore(
-  gender: Gender,
-  genderProbability: number,
-): number {
-  const femaleProb =
-    gender === Gender.FEMALE ? genderProbability : 1 - genderProbability
-  return Math.round(femaleProb * 100)
+export function toFeminineScore(gender: Gender, genderScore: number): number {
+  if (gender === 'female') return Math.round(genderScore * 100)
+  if (gender === 'male') return Math.round((1 - genderScore) * 100)
+  return 50
 }
 
 export async function detectFaceWithGender(
   input: HTMLVideoElement,
 ): Promise<FaceScanResult | null> {
-  const detection = await faceapi
-    .detectSingleFace(input, detectorOptions)
-    .withFaceLandmarks(true)
-    .withAgeAndGender()
+  const result = await getHuman().detect(input)
+  const face = result.face[0]
 
-  if (!detection) return null
+  if (
+    !face ||
+    !face.gender ||
+    face.gender === 'unknown' ||
+    face.genderScore === undefined
+  ) {
+    return null
+  }
+
+  const genderProbability =
+    face.gender === 'female' ? face.genderScore : 1 - face.genderScore
 
   return {
-    feminineScore: toFeminineScore(
-      detection.gender,
-      detection.genderProbability,
-    ),
-    gender: detection.gender,
-    genderProbability: detection.genderProbability,
+    feminineScore: toFeminineScore(face.gender, face.genderScore),
+    gender: face.gender,
+    genderProbability,
   }
 }
-
-export { faceapi }

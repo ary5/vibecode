@@ -13,7 +13,7 @@ pnpm install
 pnpm dev
 ```
 
-Open https://localhost:5173/ (the dev server uses HTTPS so the camera works on mobile over the network).
+Open https://localhost:5173/ after starting the dev server. The first `pnpm dev` may prompt for permission to install a local certificate authority (required once for trusted HTTPS).
 
 For mobile testing on your LAN, use the **HTTPS** Network URL printed in the terminal (not `http://`).
 
@@ -35,4 +35,4 @@ This repo is configured for Netlify via [`netlify.toml`](netlify.toml):
 ## Tech stack
 
 - React + TypeScript + Vite
-- [@vladmandic/face-api](https://github.com/vladmandic/face-api) for in-browser face detection and gender classification
+- [@vladmandic/human](https://github.com/vladmandic/human) for in-browser face detection and gender classification (models load from CDN on first scan)
